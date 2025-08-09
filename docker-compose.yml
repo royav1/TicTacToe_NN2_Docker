@@ -1,0 +1,22 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    restart: always
+    networks:
+      - ttt-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - ttt-net
+
+networks:
+  ttt-net:
