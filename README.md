@@ -1,3 +1,6 @@
+## 🎮 Play Online:
+You can try the deployed version here: [Play Tic-Tac-Toe Online](https://splendid-rugelach-3ff6a4.netlify.app/)
+
 # to activate this (Dockerized) Tic-Tac_toe program do the following steps:
 
 ## 1) Clone the repo
