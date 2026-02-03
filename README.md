@@ -113,6 +113,7 @@ docker-compose up --build
 3️⃣ Open your browser:
 * Frontend: http://localhost:3000
 * Backend API: http://localhost:5000
+
 The docker-compose.yml file builds and runs both services on the same network.
 4️⃣ Stop
 ```bash
