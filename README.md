@@ -124,7 +124,8 @@ docker-compose down
 docker-compose build --no-cache && docker-compose up
 ```
 
-🌐 Live Demo (Status)
-* The live online demo (Netlify + Render) is temporarily offline while API routing is being updated.
-* The Docker version is fully functional and the recommended way to play.
+🌐 Deployment Status
+
+The project runs locally via Docker Compose (frontend + backend).
+Public cloud deployment is not included, as the focus was on ML training and full-stack integration.
 
