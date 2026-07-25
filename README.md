@@ -128,5 +128,80 @@ docker-compose build --no-cache && docker-compose up
 🌐 Deployment Status
 
 The project runs locally via Docker Compose (frontend + backend).
-Public cloud deployment is not included, as the focus was on ML training and full-stack integration.
+Public portfolio deployment instructions are included below for Netlify and Render.
+
+## Portfolio Deployment
+
+The project is prepared for a split public deployment:
+
+* React frontend on Netlify
+* Flask backend on Render
+* Local Docker Compose workflow preserved
+
+Live URL placeholders:
+
+* Netlify live demo: `https://<your-netlify-site>.netlify.app`
+* Render backend: `https://<your-render-service>.onrender.com`
+* Backend health check: `https://<your-render-service>.onrender.com/health`
+
+Required environment variables:
+
+Frontend on Netlify:
+
+```bash
+REACT_APP_API_URL=https://<your-render-service>.onrender.com
+```
+
+Backend on Render:
+
+```bash
+FRONTEND_ORIGINS=http://localhost:3000,https://<your-netlify-site>.netlify.app
+PORT=<provided by Render>
+FLASK_DEBUG=false
+```
+
+Do not use `*` for production CORS. Set `FRONTEND_ORIGINS` to the exact local and production frontend origins, separated by commas.
+
+Netlify settings:
+
+* Base directory: `frontend`
+* Build command: `npm run build`
+* Publish directory: `build`
+* Required environment variable: `REACT_APP_API_URL`
+
+Render settings:
+
+* Root directory: `backend`
+* Runtime: Python
+* Build command: `pip install -r requirements.txt`
+* Start command: `gunicorn app:app`
+* Health check path: `/health`
+* Required environment variables: `FRONTEND_ORIGINS`, `FLASK_DEBUG`
+
+The Gunicorn target is `app:app`: the Flask application object is named `app` and is exported from the `backend/app` package in `backend/app/__init__.py`.
+
+Deployment order:
+
+1. Create the Render backend service from the `backend` directory.
+2. Set Render environment variables with `FRONTEND_ORIGINS=http://localhost:3000` until the Netlify URL exists.
+3. Deploy Render and copy the Render service URL.
+4. Create the Netlify frontend site from the `frontend` directory.
+5. Set `REACT_APP_API_URL` in Netlify to the Render service URL.
+6. Deploy Netlify and copy the Netlify live-demo URL.
+7. Update Render `FRONTEND_ORIGINS` to include both `http://localhost:3000` and the Netlify origin.
+8. Redeploy Render, then redeploy Netlify if its backend URL changed.
+
+Local Docker usage remains unchanged:
+
+```bash
+docker compose up --build
+```
+
+Local URLs:
+
+* Frontend: `http://localhost:3000`
+* Backend API: `http://localhost:5000`
+* Health check: `http://localhost:5000/health`
+
+The tracked `frontend/.env.production` keeps the Docker Compose frontend build pointed at `http://localhost:5000`. Netlify should provide `REACT_APP_API_URL` through its environment settings instead of committing production URLs.
 

@@ -16,6 +16,10 @@ model = TicTacToeNet()
 model.load_state_dict(torch.load("models/tictactoe_model_qlearning.pt", map_location="cpu"))
 model.eval()
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
+
 def board_to_tensor(board):
     return torch.tensor(board, dtype=torch.float32)
 

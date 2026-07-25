@@ -9,8 +9,8 @@ type PlayerChoice = 1 | 2;
 type BackendPlayer = 1 | -1;
 type GameStatus = 'playing' | 'finished';
 
-// ✅ Base API URL from .env.production or fallback
-const API_BASE = process.env.REACT_APP_API_URL || '';
+// Base API URL from environment, with local Docker/development fallback.
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const App: React.FC = () => {
   const [board, setBoard] = useState<number[]>(Array(9).fill(0));
