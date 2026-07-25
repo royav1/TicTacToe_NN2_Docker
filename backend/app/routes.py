@@ -13,7 +13,7 @@ score_draws = 0
 
 # Load model
 model = TicTacToeNet()
-model.load_state_dict(torch.load("models/tictactoe_model_qlearning.pt"))
+model.load_state_dict(torch.load("models/tictactoe_model_qlearning.pt", map_location="cpu"))
 model.eval()
 
 def board_to_tensor(board):

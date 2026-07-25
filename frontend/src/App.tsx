@@ -5,18 +5,20 @@ import Board from './components/Board';
 import Score from './components/Score';
 import axios from 'axios';
 
-type Player = 1 | 2;
-type GameStatus = 'playing' | 'won' | 'draw';
+type PlayerChoice = 1 | 2;
+type BackendPlayer = 1 | -1;
+type GameStatus = 'playing' | 'finished';
 
 // ✅ Base API URL from .env.production or fallback
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const App: React.FC = () => {
   const [board, setBoard] = useState<number[]>(Array(9).fill(0));
-  const [currentPlayer, setCurrentPlayer] = useState<Player>(1);
+  const [currentPlayer, setCurrentPlayer] = useState<BackendPlayer>(1);
   const [gameId, setGameId] = useState<string | null>(null);
   const [status, setStatus] = useState<GameStatus>('playing');
-  const [playerChoice, setPlayerChoice] = useState<Player | null>(null);
+  const [playerChoice, setPlayerChoice] = useState<PlayerChoice | null>(null);
+  const [winnerMessage, setWinnerMessage] = useState('');
 
   const [scoreX, setScoreX] = useState(0);
   const [scoreO, setScoreO] = useState(0);
@@ -70,7 +72,8 @@ const App: React.FC = () => {
         console.log('✅ Board changed or game ended — updating state.');
         setBoard(newBoard);
         setCurrentPlayer(res.data.current_player);
-        setStatus(gameOver ? 'won' : 'playing');
+        setStatus(gameOver ? 'finished' : 'playing');
+        setWinnerMessage(res.data.winner_message || '');
         return;
       }
 
@@ -115,6 +118,7 @@ const App: React.FC = () => {
   const handleNewGame = () => {
     setBoard(Array(9).fill(0));
     setStatus('playing');
+    setWinnerMessage('');
     setGameId(null);
     setPlayerChoice(null); // Triggers side selection screen again
     console.log('➕ New game requested (score preserved)');
@@ -125,6 +129,7 @@ const App: React.FC = () => {
       await axios.post(`${API_BASE}/reset_score`);
       setBoard(Array(9).fill(0));
       setStatus('playing');
+      setWinnerMessage('');
       setGameId(null);
       setPlayerChoice(null);
       console.log('🔁 Game reset');
@@ -137,14 +142,6 @@ const App: React.FC = () => {
     if (status !== 'playing') return '';
     return currentPlayer === 1 ? "🔷 X's turn" : "🔶 O's turn";
   };
-
-  const winnerMessage = status === 'won'
-    ? board.includes(1) && board.includes(2)
-      ? board.filter(x => x === 1).length === board.filter(x => x === 2).length
-        ? "🤝 It's a draw"
-        : currentPlayer === 1 ? '🔶 O wins!' : '🔷 X wins!'
-      : ''
-    : '';
 
   if (playerChoice === null) {
     return (
