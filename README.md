@@ -12,6 +12,12 @@
 Play Tic-Tac-Toe against a Q-learning–trained neural network.
 This repository contains the entire application (frontend + backend + trained model) packaged with Docker for easy deployment and local play.
 
+## Live Demo
+
+[Play the live demo](https://royav1-tictactoe-ai.netlify.app)
+
+The Render free-tier backend may take a short time to wake after inactivity.
+
 📌 The original frontend and backend repositories are now private.
 This Docker repo is the main public version of the project.
 
@@ -138,24 +144,24 @@ The project is prepared for a split public deployment:
 * Flask backend on Render
 * Local Docker Compose workflow preserved
 
-Live URL placeholders:
+Live URLs:
 
-* Netlify live demo: `https://<your-netlify-site>.netlify.app`
-* Render backend: `https://<your-render-service>.onrender.com`
-* Backend health check: `https://<your-render-service>.onrender.com/health`
+* Public frontend demo: `https://royav1-tictactoe-ai.netlify.app`
+* Backend API: `https://tictactoe-nn2-docker.onrender.com`
+* Health endpoint: `https://tictactoe-nn2-docker.onrender.com/health`
 
 Required environment variables:
 
 Frontend on Netlify:
 
 ```bash
-REACT_APP_API_URL=https://<your-render-service>.onrender.com
+REACT_APP_API_URL=https://tictactoe-nn2-docker.onrender.com
 ```
 
 Backend on Render:
 
 ```bash
-FRONTEND_ORIGINS=http://localhost:3000,https://<your-netlify-site>.netlify.app
+FRONTEND_ORIGINS=http://localhost:3000,https://royav1-tictactoe-ai.netlify.app
 PORT=<provided by Render>
 FLASK_DEBUG=false
 ```
